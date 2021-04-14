@@ -3,7 +3,7 @@
 	import LossChart from '$lib/LossChart.svelte';
 
 	let init_key = 1;
-	let res = { loss: [0] };
+	let res = { loss: [1., 0.5] };
 	$: (async () => {
 		res = await fetch(`https://gradapi.fly.dev/linear/${init_key}`)
 			.then((resp) => resp.json())
@@ -20,6 +20,8 @@
 	<input type="range" bind:value={init_key} />
 
 	<p>{init_key}, {losses[0]}</p>
+	
+	<div id="viz"></div>
 
 	<LossChart {losses} />
 </main>

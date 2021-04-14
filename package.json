@@ -21,6 +21,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"vega-lite-api": "^5.0.0"
+		"vega-embed": "^6.17.0"
 	}
 }
