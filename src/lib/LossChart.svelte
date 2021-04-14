@@ -7,8 +7,10 @@
 	export let losses;
 	$: data = losses.map((l, i) => ({ step: i, value: l }));
 
+	let clientWidth;
+	$: width = clientWidth;
+
 	const height = 400;
-	const width = 700;
 	const margin = 40;
 
 	$: xScale = scaleLinear()
@@ -34,7 +36,7 @@
 	};
 </script>
 
-<div class="line-chart">
+<div class="line-chart" bind:clientWidth>
 	{#if width}
 		<svg {width} {height}>
 			<Axis {width} {height} {margin} scale={xScale} position="bottom" />
