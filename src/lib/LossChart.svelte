@@ -1,27 +1,52 @@
 <script>
-	import { default as vegaEmbed } from 'vega-embed';
+	import { max } from 'd3-array';
+	import { scaleLinear } from 'd3-scale';
+	import { line } from 'd3-shape';
+	import Axis from './Axis.svelte';
 
 	export let losses;
-	$: loss_data = losses.map((l, i) => ({ step: i, loss: l }))
+	$: data = losses.map((l, i) => ({ step: i, value: l }));
 
-	$: loss_chart_json = {
-		$schema: 'https://vega.github.io/schema/vega-lite/v5.json',
-		description: 'Loss over time',
-		data: { values: loss_data },
-		mark: 'line',
-		encoding: {
-			x: { field: 'step', type: 'quantitative' },
-			y: {
-				field: 'loss',
-				type: 'quantitative',
-				scale: {
-					domain: [0, 10]
-				}
-			}
-		},
-		width: 600,
-		height: 400
+	const height = 400;
+	const width = 700;
+	const margin = 40;
+
+	$: xScale = scaleLinear()
+		.domain([0, max(data, (d) => d.step)])
+		.range([margin, width - margin]);
+
+	$: yScale = scaleLinear()
+		.domain([0, max(data, (d) => d.value)])
+		.range([height - margin, margin]);
+
+	$: lineGenerator = line()
+		.x((d) => xScale(d.step))
+		.y((d) => yScale(d.value));
+
+	$: reveal = (node, { duration }) => {
+		if (!xScale || !yScale) return;
+		const length = node.getTotalLength();
+		node.style.strokeDasharray = length;
+		return {
+			duration,
+			css: (t, u) => `stroke-dashoffset: ${u * length}`
+		};
 	};
-
-	$: vegaEmbed('#viz', loss_chart_json, { actions: false }).catch((error) => console.log(error));
 </script>
+
+<div class="line-chart">
+	{#if width}
+		<svg {width} {height}>
+			<Axis {width} {height} {margin} scale={xScale} position="bottom" />
+			<Axis {width} {height} {margin} scale={yScale} position="left" />
+			<path
+				d={lineGenerator(data)}
+				stroke="rebeccapurple"
+				stroke-width={2}
+				stroke-linecap="round"
+				fill="none"
+				in:reveal={{ duration: 0 }}
+			/>
+		</svg>
+	{/if}
+</div>
