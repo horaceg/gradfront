@@ -1,55 +1,30 @@
 <script>
 	import { browser } from '$app/env';
 	import LossChart from '$lib/LossChart.svelte';
-	import { derived, writable } from 'svelte/store';
+	import Range from '$lib/Range.svelte';
 
-	let init_key = writable(1);
-	let sliding = false;
-	function handleSliding() {
-		sliding = true;
-	}
+	let init_key = 1;
+	let lr = 0.1;
+	let momentum = 0.2;
 
-	function handleMousup() {
-		sliding = false;
-	}
+	let res = { loss: [1, 0.5] };
 
-	// let init_key = 1;
-	// let res = { loss: [1, 0.5] };
-
-	// $: browser
-	// 	? fetch(`https://gradapi.fly.dev/linear/${init_key}`)
-	// 			.then((response) => response.json())
-	// 			.then((data) => (is_latest || mousedown) && (res = data))
-	// 	: {};
-
-	let res = derived(
-		init_key,
-		($init_key, set) => {
-			let is_latest = true;
-			browser
-				? fetch(`https://gradapi.fly.dev/linear/${$init_key}`)
-						.then((response) => response.json())
-						.then((data) => (is_latest || sliding) && set(data))
-						.catch((error) =>  (is_latest || sliding) && set(error))
-				: { loss: [1, 0.5] };
-
-			return () => {
-				is_latest = false;
-			};
-		},
-		{ loss: [1, 0.5] }
-	);
-
-	$: losses = $res.loss;
+	$: descendUrl = `https://gradapi.fly.dev/linear?init_key=${init_key}&lr=${lr}&momentum=${momentum}`;
+	$: browser
+		? fetch(descendUrl)
+				.then((response) => response.json())
+				.then((data) => (res = data))
+				.catch((error) => console.log(error))
+		: {};
+	$: losses = res.loss;
 </script>
 
 <main>
 	<h1>Hello world!</h1>
 
-	<input type="range" bind:value={$init_key} on:input={handleSliding} on:mouseup={handleMousup} />
-
-	<p>{$init_key}, {losses[0]}</p>
-
+	<Range name="init_key" mini={0} maxi={100} step={1} bind:value={init_key} />
+	<Range name="lr" mini={0} maxi={1} step={0.05} bind:value={lr} />
+	<Range name="momentum" mini={0} maxi={0.95} step={0.05} bind:value={momentum} />
 	<LossChart {losses} />
 </main>
 
