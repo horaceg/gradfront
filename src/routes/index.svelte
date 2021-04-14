@@ -20,8 +20,6 @@
 </script>
 
 <main>
-	<h1>Hello world!</h1>
-
 	<Range name="init_key" mini={0} maxi={100} step={1} bind:value={init_key} />
 	<Range name="lr" mini={0} maxi={1} step={0.05} bind:value={lr} />
 	<Range name="momentum" mini={0} maxi={0.95} step={0.05} bind:value={momentum} />
