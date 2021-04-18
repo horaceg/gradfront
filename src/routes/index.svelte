@@ -11,7 +11,7 @@
   let step = 0;
   let res = { loss: [1, 0.5], predictions: [[0], [1]], x: [[0.5]], y: [0.3] };
 
-  $: descendUrl = `http://gradapi.fly.dev/linear?init_key=${init_key}&lr=${lr}&momentum=${momentum}`;
+  $: descendUrl = `https://gradapi.fly.dev/linear?init_key=${init_key}&lr=${lr}&momentum=${momentum}`;
   $: browser
     ? fetch(descendUrl)
         .then((response) => response.json())
