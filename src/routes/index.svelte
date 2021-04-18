@@ -48,7 +48,7 @@
     text-align: center;
     /* padding: 1em; */
     /* margin: 0 auto; */
-	height: 20vh;
+	height: 17vh;
     width: 90vw;
 	max-width: 400px;
     display: block;
@@ -57,7 +57,7 @@
   }
   .chart {
     height: 30vh;
-	max-width: 700px;
+	max-width: min(700px, 85vw);
 	min-width: 40vw;
     display: block;
     margin-left: auto;
