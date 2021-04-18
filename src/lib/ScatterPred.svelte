@@ -1,11 +1,19 @@
 <script>
   import * as Pancake from "@sveltejs/pancake";
+	import { tweened } from 'svelte/motion';
+	import * as easings from 'svelte/easing';
 
   export let predictions;
   export let ytrue;
   export let features;
+  export let refresh
 
-  $: points = predictions.map((p, i) => ({ x: features[i][0], pred: p, y: ytrue[i] }));
+  $: points = ytrue.map((t, i) => ({ x: features[i][0], y: t}));
+  $: pts_pred = predictions.map((p, i) => ({x: features[i][0], y: p}))
+
+  const tweenedPoints = tweened(pts_pred, {delay: 0, duration: refresh, easing: easings.cubicOut})
+
+  $: $tweenedPoints = pts_pred
 
   let ymin = 0.6;
   let ymax = 1.05;
@@ -25,15 +33,15 @@
     </Pancake.Grid>
 
     <Pancake.Svg>
-      <Pancake.SvgScatterplot data={points} x={(d) => d.x} y={(d) => d.y} let:d>
+      <Pancake.SvgScatterplot data={points} let:d>
         <path class="data" {d} />
       </Pancake.SvgScatterplot>
 
-      <Pancake.SvgLine data={points} x={(d) => d.x} y={(d) => d.pred} let:d>
+      <Pancake.SvgLine data={$tweenedPoints} let:d>
         <path class="predictions" {d} />
       </Pancake.SvgLine>
 
-      <Pancake.Quadtree data={points} x={(d) => d.x} y={(d) => d.y} let:closest>
+      <Pancake.Quadtree data={points} let:closest>
         {#if closest}
           <Pancake.SvgPoint x={closest.x} y={closest.y} let:d>
             <path class="highlight" {d} />

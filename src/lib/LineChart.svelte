@@ -1,7 +1,7 @@
 <script>
   import * as Pancake from "@sveltejs/pancake";
-
   export let data;
+  export let step;
 
   $: points = data.map((l, i) => ({ x: i, y: l }));
   $: maxx = data.length - 1;
@@ -26,6 +26,10 @@
       <Pancake.SvgLine data={points} let:d>
         <path class="data" {d} />
       </Pancake.SvgLine>
+
+      <Pancake.SvgPoint x={step} y={data[step]} let:d>
+        <path class="highlight" {d} />
+        </Pancake.SvgPoint>
     </Pancake.Svg>
   </Pancake.Chart>
 </div>
@@ -66,6 +70,14 @@
     stroke-linejoin: round;
     stroke-linecap: round;
     stroke-width: 2px;
+    fill: none;
+  }
+
+  path.highlight {
+    stroke: rgb(12, 182, 194);
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    stroke-width: 10px;
     fill: none;
   }
 </style>
