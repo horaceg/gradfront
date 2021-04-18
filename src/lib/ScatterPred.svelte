@@ -11,7 +11,7 @@
   $: points = ytrue.map((t, i) => ({ x: features[i][0], y: t}));
   $: pts_pred = predictions.map((p, i) => ({x: features[i][0], y: p}))
 
-  const tweenedPoints = tweened(pts_pred, {delay: 0, duration: refresh, easing: easings.cubicOut})
+  const tweenedPoints = tweened(pts_pred, {delay: 0, duration: refresh * 3, easing: easings.cubicOut})
 
   $: $tweenedPoints = pts_pred
 
