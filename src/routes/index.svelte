@@ -29,7 +29,7 @@
     }
     playing ? setTimeout(update, refresh) : {};
   }
-  
+
   $: descendUrl = `https://gradapi.fly.dev/linear?init_key=${init_key}&lr=${lr}&momentum=${momentum}`;
   $: browser
     ? fetch(descendUrl)
@@ -41,14 +41,16 @@
 
 <main class="inputs-ctn">
   <div class="inputs">
-    <!-- <Select
-      name="Random key"
-      options={new Array(10).fill().map((_, i) => i + 1)}
-      bind:value={init_key}
-    /> -->
-    <Range name="Step" mini={0} maxi={max_step} step={1} bind:value={step} />
+    <Select
+    name="Random key"
+    options={new Array(10).fill().map((_, i) => i + 1)}
+    bind:value={init_key}
+    />
     <Range name="Learning rate" mini={0} maxi={1} step={0.02} bind:value={lr} />
-    <Player bind:playing={playing} {update} {handleClick}/>
+    <div class="play-cluster">
+      <Player bind:playing={playing} {update} {handleClick}/>
+      <Range name="Step" mini={0} maxi={max_step} step={1} bind:value={step} />
+  </div>
     <Range name="Momentum" mini={0} maxi={0.95} step={0.02} bind:value={momentum} />
   </div>
 </main>
@@ -89,5 +91,10 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     /* grid-gap: 2px; */
+  }
+
+  .play-cluster {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 </style>
