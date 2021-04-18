@@ -48,17 +48,17 @@
     text-align: center;
     /* padding: 1em; */
     /* margin: 0 auto; */
-	height: 17vh;
+    height: 17vh;
     width: 90vw;
-	max-width: 400px;
+    max-width: 400px;
     display: block;
     margin-left: auto;
     margin-right: auto;
   }
   .chart {
     height: 30vh;
-	max-width: min(700px, 85vw);
-	min-width: 40vw;
+    max-width: min(700px, 85vw);
+    min-width: 40vw;
     display: block;
     margin-left: auto;
     margin-right: auto;
