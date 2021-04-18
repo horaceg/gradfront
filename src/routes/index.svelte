@@ -46,12 +46,19 @@
 <style>
   main {
     text-align: center;
-    padding: 1em;
-    margin: 0 auto;
+    /* padding: 1em; */
+    /* margin: 0 auto; */
+	height: 20vh;
+    width: 90vw;
+	max-width: 400px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
   .chart {
-    height: 35vh;
-    width: 40vw;
+    height: 30vh;
+	max-width: 700px;
+	min-width: 40vw;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -60,13 +67,6 @@
   .inputs {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-gap: 2px;
-  }
-
-  .inputs-ctn {
-    width: 50vw;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    /* grid-gap: 2px; */
   }
 </style>
