@@ -9,8 +9,8 @@
   let refresh = 100;
   let playing = false;
   let init_key = 1;
-  let lr = 0.1;
-  let momentum = 0.2;
+  let lr = 0.4;
+  let momentum = 0.6;
   let step = 0;
   let max_step = 29;
   let res;

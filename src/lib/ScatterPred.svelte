@@ -29,7 +29,7 @@
 
     <Pancake.Grid vertical count={10} let:value>
       <div class="grid-line vertical" />
-      <span class="year-label">{value}</span>
+      <span class="x-label">{value}</span>
     </Pancake.Grid>
 
     <Pancake.Svg>
@@ -88,7 +88,7 @@
     color: #999;
   }
 
-  .year-label {
+  .x-label {
     position: absolute;
     width: 4em;
     left: -2em;
