@@ -13,7 +13,7 @@ $: playing ? update() : {};
 
 <button class="button" class:paused={playing} on:click={toggle} />
 
-<style lang="scss">
+<style>
   .button {
     border: 0;
     background: transparent;
