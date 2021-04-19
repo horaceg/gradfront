@@ -2,6 +2,7 @@
   import * as Pancake from "@sveltejs/pancake";
 	import { tweened } from 'svelte/motion';
 	import * as easings from 'svelte/easing';
+  import {draw, fade} from 'svelte/transition'
 
   export let predictions;
   export let ytrue;
@@ -24,21 +25,21 @@
 <div class="chart">
   <Pancake.Chart x1={xmin} x2={xmax} y1={ymin} y2={ymax}>
     <Pancake.Grid horizontal count={5} let:value let:first>
-      <div class="grid-line horizontal" class:first><span>{value}</span></div>
+      <div class="grid-line horizontal" class:first><span in:fade>{value}</span></div>
     </Pancake.Grid>
 
     <Pancake.Grid vertical count={10} let:value>
       <div class="grid-line vertical" />
-      <span class="x-label">{value}</span>
+      <span in:fade class="x-label">{value}</span>
     </Pancake.Grid>
 
     <Pancake.Svg>
       <Pancake.SvgScatterplot data={points} let:d>
-        <path class="data" {d} />
+        <path in:fade class="data" {d} />
       </Pancake.SvgScatterplot>
 
-      <Pancake.SvgLine data={$tweenedPoints} let:d>
-        <path class="predictions" {d} />
+      <Pancake.SvgLine data={$tweenedPoints.filter(d => d.y < ymax & d.y > ymin)} let:d>
+        <path in:fade class="predictions" {d} />
       </Pancake.SvgLine>
 
       <Pancake.Quadtree data={points} let:closest>

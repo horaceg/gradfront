@@ -1,5 +1,7 @@
 <script>
   import * as Pancake from "@sveltejs/pancake";
+  import { draw, fade, fly } from "svelte/transition";
+
   export let data;
   export let step;
 
@@ -15,21 +17,21 @@
     </Pancake.Box>
 
     <Pancake.Grid vertical count={5} let:value>
-      <span class="x label">{value}</span>
+      <span in:fade class="x label">{value}</span>
     </Pancake.Grid>
 
     <Pancake.Grid horizontal count={3} let:value let:first>
-      <span class="y label">{value}</span>
+      <span in:fade class="y label">{value}</span>
     </Pancake.Grid>
 
     <Pancake.Svg>
       <Pancake.SvgLine data={points} let:d>
-        <path class="data" {d} />
+        <path in:fade class="data" {d} />
       </Pancake.SvgLine>
 
       <Pancake.SvgPoint x={step} y={data[step]} let:d>
-        <path class="highlight" {d} />
-        </Pancake.SvgPoint>
+        <path in:fade class="highlight" {d} />
+      </Pancake.SvgPoint>
     </Pancake.Svg>
   </Pancake.Chart>
 </div>
