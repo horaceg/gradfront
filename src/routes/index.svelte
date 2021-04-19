@@ -7,7 +7,7 @@
   import Select from "$lib/Select.svelte";
 
   let refresh = 100;
-  let playing = true;
+  let playing = false;
   let init_key = 5;
   let lr = 0.6;
   let momentum = 0.6;
@@ -15,6 +15,10 @@
   let max_step = 29;
   let res;
 
+  setTimeout(() => {
+    playing = true;
+  }, 800);
+  
   function handleClick () {
     if (step == max_step) {
       step = 0;
