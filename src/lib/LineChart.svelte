@@ -1,6 +1,6 @@
 <script>
   import * as Pancake from "@sveltejs/pancake";
-  import { draw, fade, fly } from "svelte/transition";
+  import { fade } from "svelte/transition";
 
   export let data;
   export let step;

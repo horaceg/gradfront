@@ -18,8 +18,8 @@
   setTimeout(() => {
     playing = true;
   }, 800);
-  
-  function handleClick () {
+
+  function handleClick() {
     if (step == max_step) {
       step = 0;
     }
@@ -46,19 +46,18 @@
 <main class="inputs-ctn">
   <div class="inputs">
     <Select
-    name="Random key"
-    options={new Array(10).fill().map((_, i) => i + 1)}
-    bind:value={init_key}
+      name="Random key"
+      options={new Array(10).fill().map((_, i) => i + 1)}
+      bind:value={init_key}
     />
     <Range name="Learning rate" mini={0} maxi={1} step={0.02} bind:value={lr} />
     <div class="play-cluster">
-      <Player bind:playing={playing} {update} {handleClick}/>
+      <Player bind:playing {update} {handleClick} />
       <Range name="Step" mini={0} maxi={max_step} step={1} bind:value={step} />
-  </div>
+    </div>
     <Range name="Momentum" mini={0} maxi={0.95} step={0.02} bind:value={momentum} />
   </div>
 </main>
-
 
 {#if res}
   <div class="chart">
@@ -66,7 +65,7 @@
   </div>
 
   <div class="chart">
-    <ScatterPred predictions={res.predictions[step]} ytrue={res.y} features={res.x} {refresh}/>
+    <ScatterPred predictions={res.predictions[step]} ytrue={res.y} features={res.x} {refresh} />
   </div>
 {/if}
 

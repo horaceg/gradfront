@@ -1,20 +1,24 @@
 <script>
   import * as Pancake from "@sveltejs/pancake";
-	import { tweened } from 'svelte/motion';
-	import * as easings from 'svelte/easing';
-  import {draw, fade} from 'svelte/transition'
+  import * as easings from "svelte/easing";
+  import { tweened } from "svelte/motion";
+  import { fade } from "svelte/transition";
 
   export let predictions;
   export let ytrue;
   export let features;
-  export let refresh
+  export let refresh;
 
-  $: points = ytrue.map((t, i) => ({ x: features[i][0], y: t}));
-  $: pts_pred = predictions.map((p, i) => ({x: features[i][0], y: p}))
+  $: points = ytrue.map((t, i) => ({ x: features[i][0], y: t }));
+  $: pts_pred = predictions.map((p, i) => ({ x: features[i][0], y: p }));
 
-  const tweenedPoints = tweened(pts_pred, {delay: 0, duration: refresh * 3, easing: easings.cubicOut})
+  const tweenedPoints = tweened(pts_pred, {
+    delay: 0,
+    duration: refresh * 3,
+    easing: easings.cubicOut
+  });
 
-  $: $tweenedPoints = pts_pred
+  $: $tweenedPoints = pts_pred;
 
   let ymin = 0.6;
   let ymax = 1.05;
@@ -38,7 +42,7 @@
         <path in:fade class="data" {d} />
       </Pancake.SvgScatterplot>
 
-      <Pancake.SvgLine data={$tweenedPoints.filter(d => d.y < ymax & d.y > ymin)} let:d>
+      <Pancake.SvgLine data={$tweenedPoints.filter((d) => (d.y < ymax) & (d.y > ymin))} let:d>
         <path in:fade class="predictions" {d} />
       </Pancake.SvgLine>
 

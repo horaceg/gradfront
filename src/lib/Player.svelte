@@ -2,13 +2,13 @@
   export let playing;
   export let handleClick;
 
-  function toggle () {
+  function toggle() {
     playing = !playing;
-    handleClick()
+    handleClick();
   }
-  export let update
+  export let update;
 
-$: playing ? update() : {};
+  $: playing ? update() : {};
 </script>
 
 <button class="button" class:paused={playing} on:click={toggle} />
