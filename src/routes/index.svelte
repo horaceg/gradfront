@@ -7,7 +7,7 @@
   import Select from "$lib/Select.svelte";
 
   let refresh = 100;
-  let playing = false;
+  let playing = true;
   let init_key = 5;
   let lr = 0.6;
   let momentum = 0.6;
