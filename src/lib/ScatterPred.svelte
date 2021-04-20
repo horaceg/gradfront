@@ -32,7 +32,7 @@
       <div class="grid-line horizontal" class:first><span in:fade>{value}</span></div>
     </Pancake.Grid>
 
-    <Pancake.Grid vertical count={10} let:value>
+    <Pancake.Grid vertical count={6} let:value>
       <div class="grid-line vertical" />
       <span in:fade class="x-label">{value}</span>
     </Pancake.Grid>
