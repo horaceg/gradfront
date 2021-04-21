@@ -1,7 +1,7 @@
 <script>
   import * as Pancake from "@sveltejs/pancake";
   import * as easings from "svelte/easing";
-  import { tweened } from "svelte/motion";
+  import { spring, tweened } from "svelte/motion";
   import { fade } from "svelte/transition";
 
   export let predictions;
@@ -10,7 +10,7 @@
   export let refresh;
 
   $: points = ytrue.map((t, i) => ({ x: features[i][0], y: t }));
-  $: pts_pred = predictions.map((p, i) => ({ x: features[i][0], y: p }));
+  $: pts_pred = [...predictions.map((p, i) => ({ x: features[i][0], y: p }))].sort((a, b) => (a.x - b.x))
 
   const tweenedPoints = tweened(pts_pred, {
     delay: 0,
@@ -20,14 +20,21 @@
 
   $: $tweenedPoints = pts_pred;
 
-  let ymin = 0.6;
-  let ymax = 1.05;
-  let xmin = 0;
-  let xmax = 1;
+  // let ymin = 0.6;
+  // let ymax = 1.05;
+  let ymin = spring();
+  let ymax = spring();
+  let xmin = spring();
+  let xmax = spring();
+  $: $ymin = Math.min(...ytrue)
+  $: $ymax = Math.max(...ytrue)
+
+  $: $xmin = Math.min(...features)
+  $: $xmax = Math.max(...features)
 </script>
 
 <div class="chart">
-  <Pancake.Chart x1={xmin} x2={xmax} y1={ymin} y2={ymax}>
+  <Pancake.Chart x1={$xmin} x2={$xmax} y1={$ymin} y2={$ymax}>
     <Pancake.Grid horizontal count={5} let:value let:first>
       <div class="grid-line horizontal" class:first><span in:fade>{value}</span></div>
     </Pancake.Grid>
@@ -42,7 +49,7 @@
         <path in:fade class="data" {d} />
       </Pancake.SvgScatterplot>
 
-      <Pancake.SvgLine data={$tweenedPoints.filter((d) => (d.y < ymax) & (d.y > ymin))} let:d>
+      <Pancake.SvgLine data={$tweenedPoints.filter((d) => (d.y < $ymax) & (d.y > $ymin))} let:d>
         <path in:fade class="predictions" {d} />
       </Pancake.SvgLine>
 

@@ -8,12 +8,13 @@
 
   let refresh = 100;
   let playing = false;
-  let init_key = 5;
-  let lr = 0.6;
-  let momentum = 0.6;
+  let init_key = 2;
+  let lr = 0.3;
+  let momentum = 0.7;
   let step = 0;
   let max_step = 29;
   let res;
+  let route = "wave";
 
   setTimeout(() => {
     playing = true;
@@ -34,28 +35,29 @@
     playing ? setTimeout(update, refresh) : {};
   }
 
-  $: descendUrl = `https://gradapi.fly.dev/linear?init_key=${init_key}&lr=${lr}&momentum=${momentum}`;
+  $: descendUrl = `https://gradapi.fly.dev/${route}?init_key=${init_key}&lr=${lr}&momentum=${momentum}`;
   $: browser
     ? fetch(descendUrl)
         .then((response) => response.json())
-        .then((data) => (res = data))
         .catch((error) => console.log(error))
+        .then((data) => (res = data))
     : {};
 </script>
 
 <main class="inputs-ctn">
+  <Select name="Problem" options="{["linear", "wave"]}", bind:value={route} />
   <div class="inputs">
     <Select
       name="Random key"
       options={new Array(10).fill().map((_, i) => i + 1)}
       bind:value={init_key}
     />
-    <Range name="Learning rate" mini={0} maxi={1} step={0.02} bind:value={lr} />
+    <Range name="Learning rate" mini={0} maxi={1.} step={0.02} bind:value={lr} />
     <div class="play-cluster">
       <Player bind:playing {update} {handleClick} />
       <Range name="Step" mini={0} maxi={max_step} step={1} bind:value={step} />
     </div>
-    <Range name="Momentum" mini={0} maxi={0.95} step={0.02} bind:value={momentum} />
+    <Range name="Momentum" mini={0} maxi={0.99} step={0.02} bind:value={momentum} />
   </div>
 </main>
 
