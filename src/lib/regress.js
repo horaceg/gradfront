@@ -17,7 +17,7 @@ function applyWave(params, xt) {
 function makeRegression(apply, n, p) {
     Math.seedrandom(8)
     let xt = tf.randomUniform([n, p], -3, 3.)
-    let w = tf.randomNormal([p]).mul(2.)
+    let w = tf.randomNormal([p])
     let b = tf.randomNormal([1]).squeeze()
     let noise = tf.randomNormal([n]).mul(0.2)
     let yt = apply([w, b], xt).add(noise)

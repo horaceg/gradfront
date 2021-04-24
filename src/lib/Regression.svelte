@@ -10,7 +10,7 @@
   let refresh = 100;
   let playing = false;
   let init_key = 2;
-  let lr = 0.86;
+  let lr = 0.63;
   let momentum = 0.75;
   let step = 0;
   let max_step = 30;
