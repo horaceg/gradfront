@@ -63,7 +63,8 @@ function setup(apply, n) {
 
 function regress(problem, init_key, lr, momentum, n_train) {
     let apply = problem === "wave" ? applyWave : applyLinear
-    let { xt, yt, gradLoss } = setup(apply, 100)
+    let n = 50
+    let { xt, yt, gradLoss } = setup(apply, n)
     Math.seedrandom(init_key)
     let init_params = [
         tf.randomNormal([1], 0, 3),
