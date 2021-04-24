@@ -1,37 +1,42 @@
 <script>
   import * as Pancake from "@sveltejs/pancake";
-  import { fade } from "svelte/transition";
+  import { spring, tweened } from "svelte/motion";
 
   export let data;
   export let step;
 
-  $: points = data.map((l, i) => ({ x: i, y: l }));
-  $: maxx = data.length - 1;
-  $: maxy = Math.max(...data);
+  // let pts = data.map((l, i) => ({ x: i, y: l }))
+  // let points = spring(pts, {delay: 0, duration: 10});
+  let points = spring()
+
+  $: $points = data.map((l, i) => ({ x: i, y: Math.min(l, 100) }));
+  // $: points = data.map((l, i) => ({ x: i, y: l }))
+  $: xmax = data.length - 1;
+  $: ymax = Math.max(...data);
 </script>
 
 <div class="chart">
-  <Pancake.Chart x1={0} x2={maxx} y1={0} y2={maxy}>
-    <Pancake.Box x2={maxx} y2={maxy}>
+  <Pancake.Chart x1={0} x2={xmax} y1={0} y2={ymax}>
+    <Pancake.Box x2={xmax} y2={ymax}>
       <div class="axes" />
     </Pancake.Box>
 
     <Pancake.Grid vertical count={5} let:value>
-      <span in:fade class="x label">{value}</span>
+      <span class="x label">{value}</span>
     </Pancake.Grid>
 
     <Pancake.Grid horizontal count={3} let:value let:first>
-      <span in:fade class="y label">{value}</span>
+      <span class="y label">{value}</span>
     </Pancake.Grid>
 
     <Pancake.Svg>
-      <Pancake.SvgLine data={points} let:d>
-        <path in:fade class="data" {d} />
+      <Pancake.SvgLine data={$points.filter(d => (d.y <= ymax) & (d.y > 0))} let:d>
+        <path class="data" {d} />
       </Pancake.SvgLine>
 
-      <Pancake.SvgPoint x={step} y={data[step]} let:d>
-        <path in:fade class="highlight" {d} />
-      </Pancake.SvgPoint>
+      <Pancake.SvgLine data={[{x: step, y: 0}, {x: step, y: ymax}]} let:d>
+        <path class="highlight" {d} />
+      </Pancake.SvgLine>
     </Pancake.Svg>
   </Pancake.Chart>
 </div>
@@ -76,10 +81,10 @@
   }
 
   path.highlight {
-    stroke: rgb(12, 182, 194);
+    stroke: black;
     stroke-linejoin: round;
     stroke-linecap: round;
-    stroke-width: 10px;
+    stroke-width: 1.5px;
     fill: none;
   }
 </style>

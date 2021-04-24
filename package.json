@@ -21,6 +21,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@sveltejs/pancake": "^0.0.17"
+		"@sveltejs/pancake": "^0.0.17",
+		"@tensorflow/tfjs": "^3.4.0"
 	}
 }
