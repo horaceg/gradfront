@@ -1,6 +1,7 @@
 <script>
   import LineChart from "$lib/LineChart.svelte";
   import Player from "$lib/Player.svelte";
+  import Backward from "$lib/Backward.svelte"
   import Range from "$lib/Range.svelte";
   import { regress } from "$lib/regress";
   import ScatterPred from "$lib/ScatterPred.svelte";
@@ -9,16 +10,21 @@
   let refresh = 100;
   let playing = false;
   let init_key = 2;
-  let lr = 0.92;
-  let momentum = 0.7;
+  let lr = 0.86;
+  let momentum = 0.75;
   let step = 0;
   let max_step = 30;
   let route = "wave";
   let errorsVisible = true;
 
-  setTimeout(() => {
-    playing = true;
-  }, 500);
+  function backward(){
+    step = 0; 
+    playing = false
+  }
+
+  // setTimeout(() => {
+  //   playing = true;
+  // }, 500);
 
   function handleClick() {
     if (step == max_step) {
@@ -27,15 +33,15 @@
   }
 
   function update() {
-    if (step == max_step) {
+    if (step == max_step & playing) {
       playing = false;
-    } else {
+    } else if (playing) {
       step += 1;
     }
     playing ? setTimeout(update, refresh) : {};
   }
 
-  $: res = regress(route, init_key, lr, momentum);
+  $: res = regress(route, init_key, lr, momentum, max_step);
   $: lrmax = route == "linear" ? 0.2 : 1.;
   $: lr = Math.min(lrmax, lr)
 </script>
@@ -50,12 +56,13 @@
         options={new Array(10).fill().map((_, i) => i + 1)}
         bind:value={init_key}
       />
-      <Range name="Learning rate" mini={0} maxi={lrmax} step={0.02} bind:value={lr} />
+      <Range name="Learning rate" mini={0} maxi={lrmax} step={0.01} bind:value={lr} />
       <div class="play-cluster">
         <Player bind:playing {update} {handleClick} />
+        <Backward onClick={backward} />
         <Range name="Step" mini={0} maxi={max_step} step={1} bind:value={step} />
       </div>
-      <Range name="Momentum" mini={0} maxi={0.99} step={0.02} bind:value={momentum} />
+      <Range name="Momentum" mini={0} maxi={.99} step={0.01} bind:value={momentum} />
     </div>
   </div>
 
@@ -121,6 +128,6 @@
 
   .play-cluster {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
   }
 </style>

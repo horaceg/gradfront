@@ -1,4 +1,6 @@
 import * as tf from '@tensorflow/tfjs';
+// import "@tensorflow/tfjs-backend-cpu"
+
 tf.setBackend("cpu")
 console.log(tf.getBackend())
 
@@ -59,14 +61,13 @@ function setup(apply, n) {
 
 }
 
-function regress(problem, init_key, lr, momentum) {
+function regress(problem, init_key, lr, momentum, n_train) {
     let apply = problem === "wave" ? applyWave : applyLinear
     let { xt, yt, gradLoss } = setup(apply, 100)
-    let n_train = 30
     Math.seedrandom(init_key)
     let init_params = [
-        tf.randomNormal([1]),
-        tf.randomNormal([1]).squeeze(),
+        tf.randomNormal([1], 0, 3),
+        tf.randomNormal([1], 0, 3).squeeze(),
     ]
 
     let res = optimize(gradLoss, n_train, lr, momentum, init_params)
