@@ -10,6 +10,7 @@
   export let lossBatch;
   export let step;
   export let params;
+  export let init_params;
 
   let _params = spring();
   let xstep = spring();
@@ -18,6 +19,9 @@
   $: $_params = params;
   $: $xstep = $_params[step][0][0];
   $: $ystep = $_params[step][1];
+  $: filtered_params = $_params.filter(
+    (d) => (d[1] < ymax) & (d[1] > ymin) & (d[0][0] < xmax) & (d[0][0] > xmin)
+  );
 
   let xmin = -4;
   let xmax = 4;
@@ -57,17 +61,13 @@
     </Pancake.Grid>
 
     <Pancake.Svg>
-      <Contours {grid} {thresholds} {color} xshape={x_points} yshape={y_points} />
-      <Pancake.SvgLine
-        data={$_params.filter(
-          (d) => (d[1] < ymax) & (d[1] > ymin) & (d[0][0] < xmax) & (d[0][0] > xmin)
-        )}
-        x={(d) => d[0][0]}
-        y={(d) => d[1]}
-        let:d
-      >
+      <Contours {grid} {thresholds} {color} xshape={x_points} yshape={y_points} bind:init_params />
+      <Pancake.SvgLine data={filtered_params} x={(d) => d[0][0]} y={(d) => d[1]} let:d>
         <path class="traj" fill="none" {d} />
       </Pancake.SvgLine>
+      <Pancake.SvgScatterplot data={filtered_params} x={(d) => d[0][0]} y={(d) => d[1]} let:d>
+        <path class="traj-points" {d} />
+      </Pancake.SvgScatterplot>
       <Pancake.SvgPoint x={$xstep} y={$ystep} let:d>
         <path class="point" {d} />
       </Pancake.SvgPoint>
@@ -140,4 +140,13 @@
     stroke-width: 2px;
     fill: none;
   }
+
+  path.traj-points {
+    stroke: orange;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    stroke-width: 5px;
+    fill: none;
+  }
+  
 </style>

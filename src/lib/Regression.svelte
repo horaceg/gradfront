@@ -12,6 +12,7 @@
   tf.setBackend("cpu");
   console.log(tf.getBackend());
 
+  let init_params = initialize(2);
   let refresh = 100;
   let playing = false;
   let init_key = 2;
@@ -29,7 +30,9 @@
 
   function handleClick() {
     if (step == max_step) {
+      playing = false;
       step = 0;
+      setTimeout(() => (playing = true), 500);
     }
   }
 
@@ -49,12 +52,7 @@
   $: x = xt.arraySync();
   $: yt = problem.yt;
   $: y = yt.arraySync();
-  // $: gradLoss = problem.gradLoss;
   $: apply = route == "wave" ? applyWave : applyLinear;
-  $: init_params = initialize(init_key);
-  $: init_w = init_params[0].dataSync()
-  $: init_b = init_params[1].arraySync()
-  // $: init_params = [tf.tensor1d([init_w]), tf.tensor(init_b)]
   $: res = regress(apply, init_params, lr, momentum, max_step, n);
   $: lrmax = route == "linear" ? 0.2 : 1;
   $: lr = Math.min(lrmax, lr);
@@ -90,7 +88,7 @@
       <ScatterPred {errorsVisible} predictions={res.predictions[step]} ytrue={y} features={x} />
     </div>
     <div class="chart">
-      <Contours {lossBatch} {step} params={res.params}/>
+      <Contours {lossBatch} {step} params={res.params} bind:init_params />
     </div>
   </div>
 </main>
@@ -127,7 +125,7 @@
     grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
     grid-gap: 50px;
     padding: 10px;
-    margin: auto
+    margin: auto;
   }
 
   .inputs {
