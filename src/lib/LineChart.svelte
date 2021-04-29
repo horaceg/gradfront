@@ -1,42 +1,39 @@
 <script>
   import * as Pancake from "@sveltejs/pancake";
-  import { spring, tweened } from "svelte/motion";
+  import { tweened } from "svelte/motion";
 
   export let data;
   export let step;
+  export let refresh;
 
-  // let pts = data.map((l, i) => ({ x: i, y: l }))
-  // let points = spring(pts, {delay: 0, duration: 10});
-  let points = spring()
+  let points = tweened(null, { duration: refresh });
+  let xstep = tweened(null, { duration: refresh });
+  let ystep = tweened(null, { duration: refresh });
 
   $: $points = data.map((l, i) => ({ x: i, y: Math.min(l, 100) }));
-  // $: points = data.map((l, i) => ({ x: i, y: l }))
   $: xmax = data.length - 1;
   $: ymax = Math.max(...data);
+  $: $xstep = step;
+  $: $ystep = $points[step].y;
 </script>
 
 <div class="chart">
   <Pancake.Chart x1={0} x2={xmax} y1={0} y2={ymax}>
-    <Pancake.Box x2={xmax} y2={ymax}>
-      <div class="axes" />
-    </Pancake.Box>
-
     <Pancake.Grid vertical count={5} let:value>
-      <span class="x label">{value}</span>
+      <span class="x-label">{value}</span>
     </Pancake.Grid>
-
-    <Pancake.Grid horizontal count={3} let:value let:first>
-      <span class="y label">{value}</span>
+    <Pancake.Grid horizontal count={5} let:value let:first>
+      <div class="grid-line horizontal" class:first><span>{value}</span></div>
     </Pancake.Grid>
 
     <Pancake.Svg>
-      <Pancake.SvgLine data={$points.filter(d => (d.y <= ymax) & (d.y > 0))} let:d>
+      <Pancake.SvgLine data={$points.filter((d) => (d.y <= ymax) & (d.y > 0))} let:d>
         <path class="data" {d} />
       </Pancake.SvgLine>
 
-      <Pancake.SvgLine data={[{x: step, y: 0}, {x: step, y: ymax}]} let:d>
+      <Pancake.SvgPoint x={$xstep} y={$ystep} let:d>
         <path class="highlight" {d} />
-      </Pancake.SvgLine>
+      </Pancake.SvgPoint>
     </Pancake.Svg>
   </Pancake.Chart>
 </div>
@@ -44,31 +41,47 @@
 <style>
   .chart {
     height: 100%;
-    padding: 3em 2em 2em 3em;
-    box-sizing: border-box;
+    padding: 3em 0 2em 2em;
+    margin: 0 0 36px 0;
   }
 
-  .axes {
-    width: 100%;
+  .grid-line {
+    position: relative;
+    display: block;
+  }
+
+  .grid-line.horizontal {
+    width: calc(100% + 2em);
+    left: -2em;
+    border-bottom: 1px dashed #ccc;
+  }
+
+  .grid-line.vertical {
     height: 100%;
-    border-left: 1px solid black;
-    border-bottom: 1px solid black;
+    border-left: 1px dashed #ccc;
   }
 
-  .y.label {
+  .grid-line.first {
+    border-bottom: 1px solid #333;
+  }
+
+  .grid-line span {
     position: absolute;
-    left: -2.5em;
-    width: 2em;
-    text-align: right;
-    bottom: -0.5em;
+    left: 0;
+    bottom: 2px;
+    font-family: sans-serif;
+    font-size: 14px;
+    color: #999;
   }
 
-  .x.label {
+  .x-label {
     position: absolute;
     width: 4em;
     left: -2em;
     bottom: -22px;
     font-family: sans-serif;
+    font-size: 14px;
+    color: #999;
     text-align: center;
   }
 
@@ -81,10 +94,11 @@
   }
 
   path.highlight {
-    stroke: black;
+    /* stroke: rgb(12, 182, 194); */
+    stroke: red;
     stroke-linejoin: round;
     stroke-linecap: round;
-    stroke-width: 1.5px;
+    stroke-width: 10px;
     fill: none;
   }
 </style>

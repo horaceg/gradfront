@@ -22,6 +22,7 @@
 	"type": "module",
 	"dependencies": {
 		"@sveltejs/pancake": "^0.0.17",
-		"@tensorflow/tfjs": "^3.5.0"
+		"@tensorflow/tfjs": "^3.5.0",
+		"d3": "^6.7.0"
 	}
 }
