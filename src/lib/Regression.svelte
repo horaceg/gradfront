@@ -57,6 +57,7 @@
   $: lrmax = route == "linear" ? 0.2 : 1;
   $: lr = Math.min(lrmax, lr);
   $: lossBatch = make_mse(apply, xt, yt.reshape([-1, 1]));
+  $: init_params = initialize(init_key);
 </script>
 
 <main>
