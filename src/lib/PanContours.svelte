@@ -2,6 +2,7 @@
   import Contours from "$lib/Contours.svelte";
   import * as Pancake from "@sveltejs/pancake";
   import * as tf from "@tensorflow/tfjs";
+import { math } from "@tensorflow/tfjs";
   import * as d3 from "d3";
   import { spring } from "svelte/motion";
 
@@ -13,12 +14,14 @@
   export let init_params;
 
   let _params = spring();
+  let xstep = spring();
+  let ystep = spring();
 
   $: $_params = params;
-  $: xstep = Math.max(xmin, Math.min(xmax, $_params[step][0][0]));
-  $: ystep = Math.max(ymin, Math.min(ymax, $_params[step][1]));
-  $: filtered_params = $_params.filter(
-    (d) => (d[1] < ymax) & (d[1] > ymin) & (d[0][0] < xmax) & (d[0][0] > xmin)
+  $: $xstep = Math.max(xmin, Math.min(xmax, params[step][0][0]));
+  $: $ystep = Math.max(ymin, Math.min(ymax, params[step][1]));
+  $: filtered_params = $_params.map(
+    (d) => [[Math.max(xmin, Math.min(xmax, d[0][0]))], Math.max(ymin, Math.min(ymax, d[1]))]
   );
 
   let xmin = -4;
@@ -69,8 +72,11 @@
       <Pancake.SvgScatterplot data={filtered_params} x={(d) => d[0][0]} y={(d) => d[1]} let:d>
         <path class="traj-points" {d} />
       </Pancake.SvgScatterplot>
-      <Pancake.SvgPoint x={xstep} y={ystep} let:d>
+      <Pancake.SvgPoint x={$xstep} y={$ystep} let:d>
         <path class="point" {d} />
+      </Pancake.SvgPoint>
+      <Pancake.SvgPoint x={filtered_params[0][0][0]} y={filtered_params[0][1]} let:d>
+        <path class="point-start" {d} />
       </Pancake.SvgPoint>
     </Pancake.Svg>
   </Pancake.Chart>
@@ -127,7 +133,7 @@
   }
 
   .point {
-    stroke: orangered;
+    stroke: rgb(12, 182, 194);
     stroke-linejoin: round;
     stroke-linecap: round;
     stroke-width: 10px;
@@ -147,6 +153,13 @@
     stroke-linejoin: round;
     stroke-linecap: round;
     stroke-width: 5px;
+    fill: none;
+  }
+  path.point-start {
+    stroke: orange;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    stroke-width: 10px;
     fill: none;
   }
   
