@@ -13,12 +13,10 @@
   export let init_params;
 
   let _params = spring();
-  let xstep = spring();
-  let ystep = spring();
 
   $: $_params = params;
-  $: $xstep = $_params[step][0][0];
-  $: $ystep = $_params[step][1];
+  $: xstep = Math.max(xmin, Math.min(xmax, $_params[step][0][0]));
+  $: ystep = Math.max(ymin, Math.min(ymax, $_params[step][1]));
   $: filtered_params = $_params.filter(
     (d) => (d[1] < ymax) & (d[1] > ymin) & (d[0][0] < xmax) & (d[0][0] > xmin)
   );
@@ -30,10 +28,13 @@
 
   let x_points = 60;
   let y_points = 60;
-  let max_thresh = 3;
+  let max_thresh = 2;
   let nthresh = 20;
+
   let thresholds = tf.linspace(0, max_thresh, nthresh).arraySync();
-  let color = d3.scaleSequential(d3.extent(thresholds), d3.interpolateYlGnBu);
+  // $: thresholds = d3.bin().domain([0, 2]).thresholds()(grid)
+  thresholds.reverse()
+  let color = d3.scaleSequential(d3.interpolatePurples).domain([0, max_thresh]);
 
   $: ygrid = tf.linspace(ymin, ymax, y_points);
 
@@ -68,7 +69,7 @@
       <Pancake.SvgScatterplot data={filtered_params} x={(d) => d[0][0]} y={(d) => d[1]} let:d>
         <path class="traj-points" {d} />
       </Pancake.SvgScatterplot>
-      <Pancake.SvgPoint x={$xstep} y={$ystep} let:d>
+      <Pancake.SvgPoint x={xstep} y={ystep} let:d>
         <path class="point" {d} />
       </Pancake.SvgPoint>
     </Pancake.Svg>

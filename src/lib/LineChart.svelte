@@ -9,16 +9,18 @@
   let points = tweened(null, { duration: refresh });
   let xstep = tweened(null, { duration: refresh });
   let ystep = tweened(null, { duration: refresh });
+  let ymax = tweened(null, { duration: refresh });
 
-  $: $points = data.map((l, i) => ({ x: i, y: Math.min(l, 100) }));
+  $: boundData = data.map((l, i) => ({ x: i, y: Math.min(l, 100) }));
+  $: $points = boundData;
   $: xmax = data.length - 1;
-  $: ymax = Math.max(...data);
+  $: $ymax = Math.max(...data);
   $: $xstep = step;
-  $: $ystep = $points[step].y;
+  $: $ystep = boundData[step].y;
 </script>
 
 <div class="chart">
-  <Pancake.Chart x1={0} x2={xmax} y1={0} y2={ymax}>
+  <Pancake.Chart x1={0} x2={xmax} y1={0} y2={$ymax}>
     <Pancake.Grid vertical count={5} let:value>
       <span class="x-label">{value}</span>
     </Pancake.Grid>
@@ -27,7 +29,7 @@
     </Pancake.Grid>
 
     <Pancake.Svg>
-      <Pancake.SvgLine data={$points.filter((d) => (d.y <= ymax) & (d.y > 0))} let:d>
+      <Pancake.SvgLine data={$points.filter((d) => (d.y <= $ymax) & (d.y > 0))} let:d>
         <path class="data" {d} />
       </Pancake.SvgLine>
 

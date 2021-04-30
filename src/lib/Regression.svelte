@@ -82,14 +82,15 @@
 
   <div class="charts-container">
     <div class="chart">
-      <LineChart data={res.loss} {step} {refresh} />
+      <Contours {lossBatch} {step} params={res.params} bind:init_params />
     </div>
 
     <div class="chart">
       <ScatterPred {errorsVisible} predictions={res.predictions[step]} ytrue={y} features={x} />
     </div>
+
     <div class="chart">
-      <Contours {lossBatch} {step} params={res.params} bind:init_params />
+      <LineChart data={res.loss} {step} {refresh} />
     </div>
   </div>
 </main>

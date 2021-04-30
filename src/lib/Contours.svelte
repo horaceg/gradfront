@@ -15,15 +15,6 @@
   const { x_scale, y_scale, x1, y1, x2, y2, pointer } = getChartContext();
 
   $: $pointer != null ? (init_params = [tf.tensor1d([$pointer.x]), tf.tensor($pointer.y)]) : {};
-  // $: {
-  //   if (pointer !== null) {
-  //     console.log($pointer)
-  //     init_params = [tf.tensor1d([$pointer.x]), tf.tensor($pointer.y)];
-  //     console.log(init_params);
-  //   }
-  //   console.log($pointer);
-  // }
-
   $: contours = d3.contours().size([xshape, yshape]).thresholds(thresholds)(grid).map(transform);
 
   let scale_x = (x) => $x1 + (x * ($x2 - $x1)) / xshape;
