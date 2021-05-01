@@ -10,7 +10,6 @@
   import * as tf from "@tensorflow/tfjs";
 
   tf.setBackend("cpu");
-  console.log(tf.getBackend());
 
   let init_params = initialize(2);
   let refresh = 100;
@@ -99,29 +98,22 @@
   main {
     display: flexbox;
   }
-  /* .inputs-ctn {
-    text-align: center;
-    padding: 1em;
-    margin: 1 auto;
-    height: 17vh;
-    width: 90vw;
-    max-width: 400px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  */
   .chart {
     height: 30vh;
     max-width: min(700px, 92vw);
     min-width: 32vw;
     display: block;
-    /* margin-left: auto; */
-    /* margin-right: auto; */
   }
 
   .charts-container {
-    /* Grid styles */
+    display: grid;
+    align-items: auto;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    grid-gap: 50px;
+    padding: 10px;
+    margin: auto;
+  }
+  .inputs-ctn {
     display: grid;
     align-items: auto;
     grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));

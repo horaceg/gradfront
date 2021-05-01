@@ -1,9 +1,5 @@
 import * as tf from '@tensorflow/tfjs';
 
-// tf.setBackend("cou")
-console.log(tf.getBackend())
-
-
 function applyLinear(params, xt) {
     let [w, b] = params;
     return xt.dot(w).add(b)

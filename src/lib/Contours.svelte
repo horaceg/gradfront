@@ -4,8 +4,6 @@
   import { contours } from "d3-contour";
   import { geoPath } from "d3-geo";
 
-  console.log(tf.getBackend());
-
   export let color;
   export let thresholds;
   export let xshape;
