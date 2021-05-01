@@ -1,7 +1,8 @@
 <script>
   import { getChartContext } from "@sveltejs/pancake/components/Chart.svelte";
   import * as tf from "@tensorflow/tfjs";
-  import * as d3 from "d3";
+  import { contours } from "d3-contour";
+  import { geoPath } from "d3-geo";
 
   console.log(tf.getBackend());
 
@@ -14,8 +15,7 @@
 
   const { x_scale, y_scale, x1, y1, x2, y2, pointer } = getChartContext();
 
-  $: $pointer != null ? (init_params = [tf.tensor1d([$pointer.x]), tf.tensor($pointer.y)]) : {};
-  $: contours = d3.contours().size([xshape, yshape]).thresholds(thresholds)(grid).map(transform);
+  $: _contours = contours().size([xshape, yshape]).thresholds(thresholds)(grid).map(transform);
 
   let scale_x = (x) => $x1 + (x * ($x2 - $x1)) / xshape;
   let scale_y = (y) => $y1 + (y * ($y2 - $y1)) / yshape;
@@ -34,6 +34,10 @@
   };
 </script>
 
-{#each contours as c, i}
-  <path d={d3.geoPath()(c)} fill={color(thresholds[i])} />
+{#each _contours as c, i}
+  <path
+    d={geoPath()(c)}
+    fill={color(thresholds[i])}
+    on:click={() => (init_params = [tf.tensor1d([$pointer.x]), tf.tensor($pointer.y)])}
+  />
 {/each}

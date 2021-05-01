@@ -23,6 +23,10 @@
 	"dependencies": {
 		"@sveltejs/pancake": "^0.0.17",
 		"@tensorflow/tfjs": "^3.5.0",
-		"d3": "^6.7.0"
+		"d3-contour": "^2.0.0",
+		"d3-geo": "^2.0.1",
+		"d3-interpolate": "^2.0.1",
+		"d3-scale": "^3.3.0",
+		"d3-scale-chromatic": "^2.0.0"
 	}
 }

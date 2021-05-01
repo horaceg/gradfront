@@ -2,12 +2,10 @@
   import Contours from "$lib/Contours.svelte";
   import * as Pancake from "@sveltejs/pancake";
   import * as tf from "@tensorflow/tfjs";
-import { math } from "@tensorflow/tfjs";
-  import * as d3 from "d3";
+  import { scaleSequential } from "d3-scale";
+  import { interpolatePurples } from "d3-scale-chromatic"
   import { spring } from "svelte/motion";
-
-  // tf.setBackend("cpu");
-
+  
   export let lossBatch;
   export let step;
   export let params;
@@ -20,9 +18,10 @@ import { math } from "@tensorflow/tfjs";
   $: $_params = params;
   $: $xstep = Math.max(xmin, Math.min(xmax, params[step][0][0]));
   $: $ystep = Math.max(ymin, Math.min(ymax, params[step][1]));
-  $: filtered_params = $_params.map(
-    (d) => [[Math.max(xmin, Math.min(xmax, d[0][0]))], Math.max(ymin, Math.min(ymax, d[1]))]
-  );
+  $: filtered_params = $_params.map((d) => [
+    [Math.max(xmin, Math.min(xmax, d[0][0]))],
+    Math.max(ymin, Math.min(ymax, d[1]))
+  ]);
 
   let xmin = -4;
   let xmax = 4;
@@ -36,8 +35,8 @@ import { math } from "@tensorflow/tfjs";
 
   let thresholds = tf.linspace(0, max_thresh, nthresh).arraySync();
   // $: thresholds = d3.bin().domain([0, 2]).thresholds()(grid)
-  thresholds.reverse()
-  let color = d3.scaleSequential(d3.interpolatePurples).domain([0, max_thresh]);
+  thresholds.reverse();
+  let color = scaleSequential(interpolatePurples).domain([0, max_thresh]);
 
   $: ygrid = tf.linspace(ymin, ymax, y_points);
 
@@ -59,9 +58,10 @@ import { math } from "@tensorflow/tfjs";
       <div class="grid-line horizontal" class:first><span>{value}</span></div>
     </Pancake.Grid>
 
-    <Pancake.Grid vertical count={6} let:value>
-      <div class="grid-line vertical" />
+    <Pancake.Grid vertical count={6} let:value let:first>
+      <!-- <div class="grid-line vertical" class:first> -->
       <span class="x-label">{value}</span>
+      <!-- </div> -->
     </Pancake.Grid>
 
     <Pancake.Svg>
@@ -77,6 +77,7 @@ import { math } from "@tensorflow/tfjs";
       </Pancake.SvgPoint>
       <Pancake.SvgPoint x={filtered_params[0][0][0]} y={filtered_params[0][1]} let:d>
         <path class="point-start" {d} />
+        <!-- <Moveable draggable={true} on:drag={({ detail }) => console.log(detail)} /> -->
       </Pancake.SvgPoint>
     </Pancake.Svg>
   </Pancake.Chart>
@@ -162,5 +163,4 @@ import { math } from "@tensorflow/tfjs";
     stroke-width: 10px;
     fill: none;
   }
-  
 </style>
