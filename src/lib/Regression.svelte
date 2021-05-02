@@ -1,6 +1,7 @@
 <script>
   import Backward from "$lib/Backward.svelte";
   import LineChart from "$lib/LineChart.svelte";
+  import Contours from "$lib/PanContours.svelte";
   import Player from "$lib/Player.svelte";
   import Range from "$lib/Range.svelte";
   import {
@@ -17,8 +18,8 @@
   import Select from "$lib/Select.svelte";
   import * as tf from "@tensorflow/tfjs";
 
-  console.log(tf.getBackend())
-  // tf.setBackend("cpu");
+  tf.setBackend("cpu");
+  console.log(tf.getBackend());
 
   let init_params = initialize(2);
   let refresh = 100;
@@ -27,10 +28,11 @@
   let lr = 0.63;
   let momentum = 0.75;
   let step = 0;
-  let max_step = 200;
   let errorsVisible = true;
   let model = "wave";
   let pb = "wave";
+  let n = 100;
+  let max_step = 200;
 
   function backward() {
     step = 0;
@@ -63,10 +65,8 @@
   const paramsMapping = {
     wave: { lr: 0.63, momentum: 0.75, lrmax: 2 },
     linear: { lr: 0.15, momentum: 0.75, lrmax: 0.2 },
-    nn: { lr: 0.05, momentum: 0.82, lrmax: 0.1 }
+    nn: { lr: 0.12, momentum: 0.8, lrmax: 0.3 }
   };
-
-  let n = 50;
 
   $: lr = paramsMapping[model].lr;
   $: momentum = paramsMapping[model].momentum;
@@ -80,7 +80,7 @@
   $: yt = problem.yt;
   $: y = yt.arraySync();
   $: apply = modelMapping[model];
-  $: res = regress(apply, gradLoss, xt, init_params, lr, momentum, max_step, n);
+  $: res = regress(apply, gradLoss, xt, init_params, lr, momentum, max_step);
   $: lossBatch = make_mse(apply, xt, yt.reshape([-1, 1]));
   $: init_params = model != "nn" ? initialize(init_key) : initNN(init_key, xt.shape[1], [3, 3, 3]);
 </script>

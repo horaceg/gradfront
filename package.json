@@ -17,7 +17,6 @@
     "eslint-plugin-svelte3": "^3.1.0",
     "prettier": "~2.2.1",
     "prettier-plugin-svelte": "^2.2.0",
-    "rollup-plugin-copy": "^3.4.0",
     "svelte": "^3.29.0",
     "vite": "^2.1.0"
   },
@@ -25,7 +24,6 @@
   "dependencies": {
     "@sveltejs/pancake": "^0.0.17",
     "@tensorflow/tfjs": "^3.6.0",
-    "@tensorflow/tfjs-backend-wasm": "^3.6.0",
     "d3-contour": "^2.0.0",
     "d3-geo": "^2.0.1",
     "d3-interpolate": "^2.0.1",

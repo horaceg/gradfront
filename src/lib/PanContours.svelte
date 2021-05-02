@@ -77,7 +77,6 @@
       </Pancake.SvgPoint>
       <Pancake.SvgPoint x={filtered_params[0][0][0]} y={filtered_params[0][1]} let:d>
         <path class="point-start" {d} />
-        <!-- <Moveable draggable={true} on:drag={({ detail }) => console.log(detail)} /> -->
       </Pancake.SvgPoint>
     </Pancake.Svg>
   </Pancake.Chart>
@@ -85,8 +84,6 @@
 
 <style>
   .chart {
-    /* width: 30vw;
-    height: 30vh; */
     height: 100%;
     padding: 3em 0 2em 2em;
     margin: 0 0 36px 0;
@@ -108,10 +105,6 @@
     height: 100%;
     border-left: 1px dashed #ccc;
   }
-  /* 
-  .grid-line.first {
-    border-bottom: 1px solid #333;
-  } */
 
   .grid-line span {
     position: absolute;
