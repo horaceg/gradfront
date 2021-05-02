@@ -14,6 +14,6 @@
 
 <style>
   input[type="number"] {
-    width: 3.1em;
+    width: 3.5em;
   }
 </style>
