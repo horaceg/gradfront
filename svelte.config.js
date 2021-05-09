@@ -1,7 +1,7 @@
-const sstatic = require("@sveltejs/adapter-static");
+import sstatic from "@sveltejs/adapter-static";
 
 /** @type {import('@sveltejs/kit').Config} */
-module.exports = {
+const config = {
   kit: {
     adapter: sstatic(),
 
@@ -15,3 +15,5 @@ module.exports = {
     }
   }
 };
+
+export default config;
