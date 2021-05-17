@@ -19,11 +19,11 @@
   let ymax = spring();
   let xmin = spring();
   let xmax = spring();
-  $: $ymin = Math.min(...ytrue) - 1
-  $: $ymax = Math.max(...ytrue) + 1
+  $: $ymin = Math.min(...ytrue)
+  $: $ymax = Math.max(...ytrue)
 
-  $: $xmin = Math.min(...features) - 1
-  $: $xmax = Math.max(...features) + 1
+  $: $xmin = Math.min(...features)
+  $: $xmax = Math.max(...features)
 </script>
 
 <div class="chart">
