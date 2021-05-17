@@ -85,10 +85,6 @@
     height: 100%;
     border-left: 1px dashed #ccc;
   }
-/* 
-  .grid-line.first {
-    border-bottom: 1px solid #333;
-  } */
 
   .grid-line span {
     position: absolute;
