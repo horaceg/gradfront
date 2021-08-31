@@ -6,17 +6,12 @@
   export let predictions;
   export let ytrue;
   export let features;
-  export let refresh;
   export let errorsVisible;
 
   $: points = ytrue.map((t, i) => ({ x: features[i][0], y: t }));
   $: pts_pred = [...predictions.map((p, i) => ({ x: features[i][0], y: p, yt: ytrue[i]}))].sort((a, b) => (a.x - b.x))
 
-  const tweenedPoints = tweened(pts_pred, {
-    delay: 0,
-    duration: refresh * 3,
-    easing: easings.cubicOut
-  });
+  let tweenedPoints = spring()
 
   $: $tweenedPoints = pts_pred;
 
@@ -90,10 +85,6 @@
     height: 100%;
     border-left: 1px dashed #ccc;
   }
-/* 
-  .grid-line.first {
-    border-bottom: 1px solid #333;
-  } */
 
   .grid-line span {
     position: absolute;
