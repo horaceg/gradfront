@@ -1,9 +1,4 @@
 import * as tf from '@tensorflow/tfjs';
-// import "@tensorflow/tfjs-backend-cpu"
-
-tf.setBackend("cpu")
-console.log(tf.getBackend())
-
 
 function applyLinear(params, xt) {
     let [w, b] = params;
@@ -61,25 +56,25 @@ function setup(apply, n) {
 
 }
 
-function regress(problem, init_key, lr, momentum, n_train) {
-    let apply = problem === "wave" ? applyWave : applyLinear
-    let n = 50
-    let { xt, yt, gradLoss } = setup(apply, n)
+function initialize(init_key) {
     Math.seedrandom(init_key)
     let init_params = [
-        tf.randomNormal([1], 0, 3),
-        tf.randomNormal([1], 0, 3).squeeze(),
+        tf.randomUniform([1], -4, 4),
+        tf.randomUniform([1], -4, 4).squeeze(),
     ]
+    return init_params
+}
 
+function regress(apply, init_params, lr, momentum, n_train, n) {
+    let { xt, yt, gradLoss } = setup(apply, n)
     let res = optimize(gradLoss, n_train, lr, momentum, init_params)
 
     res = {
         loss: res.loss.map(l => l.arraySync()),
         params: res.params.map(p => p.map(el => el.arraySync())),
-        x: xt.arraySync(),
-        y: yt.arraySync(),
-        predictions: res.params.map(p => apply(p, xt).arraySync())
+        predictions: res.params.map(p => apply(p, xt).arraySync()),
     }
     return res
 }
-export { regress };
+export { regress, make_mse, setup, applyWave, applyLinear, initialize };
+
