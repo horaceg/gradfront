@@ -86,6 +86,10 @@
 </main>
 
 <style>
+  * {
+    box-sizing: border-box;
+  }
+
   main {
     display: flexbox;
   }
